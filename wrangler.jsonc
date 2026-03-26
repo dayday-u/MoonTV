@@ -1,0 +1,7 @@
+{
+  "name":"moontv",
+  "compatibility_date":"2026-03-26",
+  "assets":{
+    "directory":".vercel/output/static"
+  }
+}
