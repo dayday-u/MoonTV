@@ -1,7 +1,11 @@
 {
-  "name":"moontv",
-  "compatibility_date":"2026-03-26",
-  "assets":{
-    "directory":".vercel/output/static"
-  }
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "moontv",
+  "compatibility_date": "2026-03-17",
+  "observability": {
+    "enabled": true
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
 }
