@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 
 import { getCacheTime, getConfig } from '@/lib/config';
 
-export const runtime = 'edge';
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -152,5 +151,4 @@ export async function GET(request: Request) {
     return NextResponse.json({ code: 0, msg: 'error', class: [], list: [] }, { status: 500 });
   }
 }
-
 

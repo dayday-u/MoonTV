@@ -6,7 +6,6 @@ import { getAuthInfoFromCookie } from '@/lib/auth';
 import { getConfig } from '@/lib/config';
 import { db } from '@/lib/db';
 
-export const runtime = 'edge';
 
 // 最大保存条数（与客户端保持一致）
 const HISTORY_LIMIT = 20;
@@ -68,8 +67,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const body = await request.json();
-    const keyword: string = body.keyword?.trim();
+    const body = (await request.json()) as {
+      keyword?: string;
+    };
+    const keyword = body.keyword?.trim();
 
     if (!keyword) {
       return NextResponse.json(

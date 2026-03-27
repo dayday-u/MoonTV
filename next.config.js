@@ -66,22 +66,25 @@ const nextConfig = {
   },
 };
 
-// Setup Cloudflare Pages development platform in development mode
+// Setup OpenNext Cloudflare development platform in development mode
 if (process.env.NODE_ENV === 'development') {
-  const { setupDevPlatform } = require('@cloudflare/next-on-pages/next-dev');
-  setupDevPlatform();
+  const { initOpenNextCloudflareForDev } = require('@opennextjs/cloudflare');
+  initOpenNextCloudflareForDev();
 }
 
 // 检测是否为云平台构建
-const isCloudflarePages = process.env.CF_PAGES === '1' || 
-  process.env.CLOUDFLARE_PAGES === '1' ||
-  process.argv.includes('pages:build');
+const isCloudflarePages =
+  process.env.CF_PAGES === '1' || process.env.CLOUDFLARE_PAGES === '1';
+const isCloudflareWorkers =
+  process.env.NEXTJS_CLOUDFLARE === '1' ||
+  process.env.OPEN_NEXT_DEPLOY === 'true';
 
 const isVercel = process.env.VERCEL === '1';
 const isNetlify = process.env.NETLIFY === 'true';
 
 // 在所有云平台上禁用 next-pwa，避免与自定义 sw.js 冲突
-const isCloudPlatform = isCloudflarePages || isVercel || isNetlify;
+const isCloudPlatform =
+  isCloudflarePages || isCloudflareWorkers || isVercel || isNetlify;
 
 const withPWA = require('next-pwa')({
   dest: 'public',

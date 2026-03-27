@@ -272,7 +272,10 @@ const sortedAggregatedResults: { exact: [string, SearchResult[]][], others: [str
       });
 
       if (!streamEnabled) {
-        const json = await response.json();
+        const json = (await response.json()) as {
+          results?: SearchResult[];
+          failedSources?: { name: string; key: string; error: string }[];
+        };
         setSearchResults(json.results || []);
         setFailedSources(json.failedSources || []);
         setIsLoading(false);

@@ -7,7 +7,6 @@ import { getConfig } from '@/lib/config';
 import { db } from '@/lib/db';
 import { Favorite } from '@/lib/types';
 
-export const runtime = 'edge';
 
 /**
  * GET /api/favorites
@@ -86,8 +85,11 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const body = await request.json();
-    const { key, favorite }: { key: string; favorite: Favorite } = body;
+    const body = (await request.json()) as {
+      key?: string;
+      favorite?: Favorite;
+    };
+    const { key, favorite } = body;
 
     if (!key || !favorite) {
       return NextResponse.json(

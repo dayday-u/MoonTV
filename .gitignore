@@ -31,9 +31,12 @@ yarn-error.log*
 # local env files
 .env
 .env*.local
+.dev.vars
+.dev.vars.*
 
 # vercel
 .vercel
+.wrangler
 
 # typescript
 *.tsbuildinfo
@@ -46,3 +49,7 @@ sitemap-*.xml
 # generated files
 src/lib/runtime.ts
 public/manifest.json
+cloudflare-env.d.ts
+
+# OpenNext
+.open-next

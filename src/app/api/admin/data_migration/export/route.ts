@@ -6,9 +6,9 @@ import { deflate } from 'pako';
 import { getAuthInfoFromCookie } from '@/lib/auth';
 import { SimpleCrypto } from '@/lib/crypto';
 import { db } from '@/lib/db';
+import { getD1Database } from '@/lib/d1.db';
 import { CURRENT_VERSION } from '@/lib/version';
 
-export const runtime = 'edge';
 
 // pako 的 gzip 是同步的，不需要 promisify
 
@@ -40,7 +40,9 @@ export async function POST(req: NextRequest) {
     }
 
     // 解析请求体获取密码
-    const { password } = await req.json();
+    const { password } = (await req.json()) as {
+      password?: string;
+    };
     if (!password || typeof password !== 'string') {
       return NextResponse.json({ error: '请提供加密密码' }, { status: 400 });
     }
@@ -125,7 +127,7 @@ async function getUserPassword(username: string): Promise<string | null> {
     
     // D1 数据库存储
     if (storageType === 'd1') {
-      const d1Db = (process.env as any).DB;
+      const d1Db = getD1Database();
       if (d1Db) {
         const result = await d1Db
           .prepare('SELECT password FROM users WHERE username = ?')

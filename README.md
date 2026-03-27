@@ -88,7 +88,7 @@
 | 语言      | TypeScript 4                                                                                          |
 | 播放器    | [ArtPlayer](https://github.com/zhw2590582/ArtPlayer) · [HLS.js](https://github.com/video-dev/hls.js/) |
 | 代码质量  | ESLint · Prettier · Jest                                                                              |
-| 部署      | Docker · Vercel · pages                                                                               |
+| 部署      | Docker · Vercel · Netlify · Cloudflare Workers                                                        |
 
 ## 部署
 
@@ -152,27 +152,32 @@
 
 ### Cloudflare 部署
 
-**Cloudflare Pages 的环境变量尽量设置为密钥而非文本**
+当前仓库已改为 **Cloudflare Workers + OpenNext** 部署方案，不再使用 `next-on-pages`。
 
 #### 普通部署（localstorage）
 
 1. **Fork** 本仓库到你的 GitHub 账户。
-2. 登陆 [Cloudflare](https://cloudflare.com)，点击 **计算（Workers）-> Workers 和 Pages**，点击创建
-3. 选择 Pages，导入现有的 Git 存储库，选择 Fork 后的仓库
-4. 构建命令填写 **pnpm run pages:build**，预设框架为无，**构建输出目录**为 `.vercel/output/static`
-5. 保持默认设置完成首次部署。进入设置，将兼容性标志设置为 `nodejs_compat`，无需选择，直接粘贴
-6. 首次部署完成后进入设置，新增 PASSWORD 密钥（变量和机密下），而后重试部署。
-7. 如需自定义 `config.json`，请直接修改 Fork 后仓库中该文件。
-8. 每次 Push 到 `main` 分支将自动触发重新构建。
+2. 登录 [Cloudflare](https://cloudflare.com)，进入 **Workers & Pages -> Create -> Import a repository**。
+3. 选择 Fork 后的仓库，框架保持 **Workers**。
+4. 构建命令填写 **pnpm workers:build**。
+5. 部署命令填写 **pnpm exec wrangler deploy**。
+6. 在 **Variables and Secrets** 中至少添加 `PASSWORD`；如需站长账号，再添加 `USERNAME`。
+7. 首次部署完成后即可通过分配域名访问；如需自定义 `config.json`，请直接修改仓库中的该文件。
 
 #### D1 支持
 
-0. 完成普通部署并成功访问
-1. 点击 **存储和数据库 -> D1 SQL 数据库**，创建一个新的数据库，名称随意
-2. 进入刚创建的数据库，点击左上角的 Explore Data，将[d1-init](d1-init.sql) 中的内容粘贴到 Query 窗口后点击 **Run All**，等待运行完成
-3. 返回你的 pages 项目，进入 **设置 -> 绑定**，添加绑定 D1 数据库，选择你刚创建的数据库，变量名称填 **DB**
-4. 设置环境变量 NEXT_PUBLIC_STORAGE_TYPE，值为 **d1**；设置 USERNAME 和 PASSWORD 作为站长账号
-5. 重试部署
+0. 完成普通部署并成功访问。
+1. 点击 **Storage & Databases -> D1**，创建一个新的数据库，名称随意。
+2. 进入刚创建的数据库，在 SQL 控制台执行 [d1-init.sql](d1-init.sql)。
+3. 打开项目根目录的 `wrangler.jsonc`，取消 `d1_databases` 示例注释，并将 `database_name` / `database_id` 改成你的实际值，绑定名保持 **DB**。
+4. 在 Workers 项目环境变量中设置 `NEXT_PUBLIC_STORAGE_TYPE=d1`，并配置 `USERNAME`、`PASSWORD`。
+5. 重新部署。
+
+#### 本地预览
+
+1. 如需本地模拟 Workers 运行时，先准备 `.dev.vars` 或本地环境变量。
+2. 执行 **pnpm preview**，它会先生成 OpenNext 的 Workers 产物，再通过 Wrangler 本地预览。
+3. 更完整的步骤见 [docs/deploy-workers.md](docs/deploy-workers.md)。
 
 ### Docker 部署
 

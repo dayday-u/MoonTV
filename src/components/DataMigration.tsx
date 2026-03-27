@@ -194,7 +194,9 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
+        const errorData = (await response.json().catch(() => ({}))) as {
+          error?: string;
+        };
         throw new Error(errorData.error || `导出失败: ${response.status}`);
       }
 
@@ -277,7 +279,12 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
         body: formData,
       });
 
-      const result = await response.json();
+      const result = (await response.json()) as {
+        error?: string;
+        importedUsers?: number;
+        timestamp?: string;
+        serverVersion?: string;
+      };
 
       if (!response.ok) {
         throw new Error(result.error || `导入失败: ${response.status}`);
@@ -290,7 +297,7 @@ const DataMigration = ({ onRefreshConfig }: DataMigrationProps) => {
           <div class="text-left">
             <p><strong>导入完成！</strong></p>
             <p class="mt-2">导入的用户数量: ${result.importedUsers}</p>
-            <p>备份时间: ${new Date(result.timestamp).toLocaleString('zh-CN')}</p>
+            <p>备份时间: ${result.timestamp ? new Date(result.timestamp).toLocaleString('zh-CN') : '未知'}</p>
             <p>服务器版本: ${result.serverVersion || '未知版本'}</p>
             <p class="mt-3 text-orange-600">请刷新页面以查看最新数据。</p>
           </div>

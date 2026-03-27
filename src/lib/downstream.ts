@@ -15,6 +15,11 @@ interface ApiSearchItem {
   type_name?: string;
 }
 
+interface ApiSearchResponse {
+  list?: ApiSearchItem[];
+  pagecount?: number;
+}
+
 // 匹配 m3u8 链接的正则
 const M3U8_PATTERN = /(https?:\/\/[^"'\s]+?\.m3u8)/g;
 
@@ -115,7 +120,7 @@ export async function* searchFromApiStream(
   const response = await fetchWithTimeout(apiUrl, { headers: API_CONFIG.search.headers }, timeout);
   if (!response.ok) return;
 
-  const data = await response.json();
+  const data = (await response.json()) as ApiSearchResponse;
   if (!Array.isArray(data?.list)) return;
 
   // 第一页
@@ -143,7 +148,7 @@ export async function* searchFromApiStream(
           const pageRes = await fetchWithTimeout(pageUrl, { headers: API_CONFIG.search.headers }, timeout);
           if (!pageRes.ok) return null;
 
-          const pageData = await pageRes.json();
+          const pageData = (await pageRes.json()) as ApiSearchResponse;
           if (!Array.isArray(pageData?.list)) return null;
 
           const results = pageData.list.map((item: ApiSearchItem) =>
@@ -173,7 +178,7 @@ export async function* searchFromApiStream(
         const pageRes = await fetchWithTimeout(pageUrl, { headers: API_CONFIG.search.headers }, timeout);
         if (!pageRes.ok) continue;
 
-        const pageData = await pageRes.json();
+        const pageData = (await pageRes.json()) as ApiSearchResponse;
         if (Array.isArray(pageData?.list)) {
           const results = pageData.list.map((item: ApiSearchItem) =>
             mapItemToResult(item, apiSite, apiSite.name)
@@ -195,7 +200,7 @@ export async function getDetailFromApi(apiSite: ApiSite, id: string): Promise<Se
 
   if (!response.ok) throw new Error(`详情请求失败: ${response.status}`);
 
-  const data = await response.json();
+  const data = (await response.json()) as ApiSearchResponse;
   if (!Array.isArray(data?.list) || data.list.length === 0) {
     throw new Error('获取到的详情内容无效');
   }
@@ -213,7 +218,7 @@ export async function getDetailFromApi(apiSite: ApiSite, id: string): Promise<Se
     source_name: apiSite.name,
     class: video.vod_class,
     year: video.vod_year?.match(/\d{4}/)?.[0] || 'unknown',
-    desc: cleanHtmlTags(video.vod_content),
+    desc: cleanHtmlTags(video.vod_content || ''),
     type_name: video.type_name,
     douban_id: video.vod_douban_id,
   };

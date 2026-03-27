@@ -18,7 +18,10 @@ export default function SubscriptionAutoUpdate() {
           body: JSON.stringify({ action: 'check' }),
         });
         if (response.ok) {
-          const data = await response.json();
+          const data = (await response.json()) as {
+            updated?: boolean;
+            reason?: string;
+          };
           if (data.updated) {
             
             console.log('订阅自动更新已执行', data);

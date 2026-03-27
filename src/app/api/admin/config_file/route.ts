@@ -6,7 +6,6 @@ import { getAuthInfoFromCookie } from '@/lib/auth';
 import { getConfig } from '@/lib/config';
 import { getStorage } from '@/lib/db';
 
-export const runtime = 'edge';
 
 export async function POST(request: NextRequest) {
   const storageType = process.env.NEXT_PUBLIC_STORAGE_TYPE || 'localstorage';
@@ -41,7 +40,9 @@ export async function POST(request: NextRequest) {
     }
 
     // 获取请求体
-    const body = await request.json();
+    const body = (await request.json()) as {
+      configFile?: string;
+    };
     const { configFile } = body;
 
     if (!configFile || typeof configFile !== 'string') {

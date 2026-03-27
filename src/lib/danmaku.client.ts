@@ -292,7 +292,9 @@ export async function matchAnime(fileName: string, signal?: AbortSignal) {
       throw new Error(`HTTP error! status = ${response.status}`);
     }
 
-    const json = await response.json();
+    const json = (await response.json()) as {
+      matches?: AnimeOption[];
+    };
 
     // 直接返回 matches
     return json.matches || [];

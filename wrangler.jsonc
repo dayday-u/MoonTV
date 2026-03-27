@@ -1,11 +1,21 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
   "name": "moontv",
   "compatibility_date": "2026-03-17",
-  "observability": {
-    "enabled": true
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
   },
-  "compatibility_flags": [
-    "nodejs_compat"
+  "vars": {
+    "NEXTJS_ENV": "production"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "moontv",
+      "database_id": "f6785ccf-9a82-423e-8873-151d5b897178"
+    }
   ]
 }

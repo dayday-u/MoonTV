@@ -7,7 +7,6 @@ import { getConfig } from '@/lib/config';
 import { db } from '@/lib/db';
 import { SkipConfig } from '@/lib/types';
 
-export const runtime = 'edge';
 
 export async function GET(request: NextRequest) {
   try {
@@ -67,7 +66,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const body = await request.json();
+    const body = (await request.json()) as {
+      key?: string;
+      config?: Partial<SkipConfig>;
+    };
     const { key, config } = body;
 
     if (!key || !config) {

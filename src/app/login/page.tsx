@@ -111,7 +111,9 @@ function LoginPageClient() {
       } else if (res.status === 401) {
         setError('密码错误');
       } else {
-        const data = await res.json().catch(() => ({}));
+        const data = (await res.json().catch(() => ({}))) as {
+          error?: string;
+        };
         setError(data.error ?? '服务器错误');
       }
     } catch (error) {
@@ -138,7 +140,9 @@ function LoginPageClient() {
         const redirect = searchParams.get('redirect') || '/';
         router.replace(redirect);
       } else {
-        const data = await res.json().catch(() => ({}));
+        const data = (await res.json().catch(() => ({}))) as {
+          error?: string;
+        };
         setError(data.error ?? '服务器错误');
       }
     } catch (error) {

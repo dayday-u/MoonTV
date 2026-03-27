@@ -1064,19 +1064,7 @@ function PlayPageClient() {
           if (abortController.signal.aborted) return;
           if (matches.length > 0) {
             const m = matches[0];
-            const animeOption = {
-              animeId: m.animeId,
-              animeTitle: m.animeTitle,
-              type: m.type,
-              typeDescription: m.typeDescription,
-              episodeCount: 1,
-              episodes: [
-                {
-                  episodeId: m.episodeId,
-                  episodeTitle: m.episodeTitle,
-                },
-              ],
-            };
+            const animeOption = m;
             setSelectedDanmakuAnime(animeOption);
             setSelectedDanmakuSource(platform);
             success = true;

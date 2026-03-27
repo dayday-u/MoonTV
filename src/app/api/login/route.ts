@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getConfig } from '@/lib/config';
 import { db } from '@/lib/db';
 
-export const runtime = 'edge';
 
 // 读取存储类型环境变量，默认 localstorage
 const STORAGE_TYPE =
@@ -88,7 +87,9 @@ export async function POST(req: NextRequest) {
         return response;
       }
 
-      const { password } = await req.json();
+      const { password } = (await req.json()) as {
+        password?: string;
+      };
       if (typeof password !== 'string') {
         return NextResponse.json({ error: '密码不能为空' }, { status: 400 });
       }
@@ -123,7 +124,10 @@ export async function POST(req: NextRequest) {
     }
 
     // 数据库 / redis 模式——校验用户名并尝试连接数据库
-    const { username, password } = await req.json();
+    const { username, password } = (await req.json()) as {
+      username?: string;
+      password?: string;
+    };
 
     if (!username || typeof username !== 'string') {
       return NextResponse.json({ error: '用户名不能为空' }, { status: 400 });

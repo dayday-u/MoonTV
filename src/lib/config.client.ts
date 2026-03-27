@@ -8,7 +8,7 @@ export async function getCustomCategories(): Promise<{
   query: string;
 }[]> {
   const res = await fetch('/api/config/custom_category');
-  const data = await res.json();
+  const data = (await res.json()) as any[];
   return data.filter((item: any) => !item.disabled).map((category: any) => ({
     name: category.name || '',
     type: category.type,
@@ -29,7 +29,7 @@ export async function getAvailableApiSitesClient(): Promise<ApiSite[]> {
     if (!res.ok) {
       throw new Error('Failed to fetch sources');
     }
-    const data = await res.json();
+    const data = (await res.json()) as any[];
     // 服务器已做按用户与禁用过滤
     return data.map((site: any) => ({
       key: site.key,

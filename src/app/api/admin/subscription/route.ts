@@ -7,7 +7,6 @@ import { configSelfCheck,getConfig } from '@/lib/config';
 import { getStorage } from '@/lib/db';
 import { IStorage } from '@/lib/types';
 
-export const runtime = 'edge';
 
 // 支持的操作类型
 type Action = 'update' | 'import' | 'check';

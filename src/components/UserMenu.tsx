@@ -127,7 +127,11 @@ export const UserMenu: React.FC = () => {
     try {
       const res = await fetch('/api/admin/tvbox', { cache: 'no-store' });
       if (!res.ok) return;
-      const data = await res.json();
+      const data = (await res.json()) as {
+        enabled?: boolean;
+        password?: string;
+        url?: string;
+      };
       setTvboxEnabled(!!data.enabled);
       setTvboxPassword(data.password || '');
       setTvboxUrl(data.url || '');
@@ -369,7 +373,9 @@ export const UserMenu: React.FC = () => {
         }),
       });
 
-      const data = await response.json();
+      const data = (await response.json()) as {
+        error?: string;
+      };
 
       if (!response.ok) {
         setPasswordError(data.error || '修改密码失败');

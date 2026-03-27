@@ -187,7 +187,9 @@ const UserConfig = ({ config, role, refreshConfig }: UserConfigProps) => {
       });
 
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
+        const data = (await res.json().catch(() => ({}))) as {
+          error?: string;
+        };
         throw new Error(data.error || `操作失败: ${res.status}`);
       }
 
@@ -336,7 +338,9 @@ const UserConfig = ({ config, role, refreshConfig }: UserConfigProps) => {
         body: JSON.stringify({ action: 'create', name, sourceKeys }),
       });
       if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
+        const data = (await resp.json().catch(() => ({}))) as {
+          error?: string;
+        };
         throw new Error(data.error || '创建分组失败');
       }
       await refreshConfig();
@@ -360,7 +364,9 @@ const UserConfig = ({ config, role, refreshConfig }: UserConfigProps) => {
         body: JSON.stringify({ action: 'assignUsers', name: groupName, users: Array.from(selectedUsers) }),
       });
       if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
+        const data = (await resp.json().catch(() => ({}))) as {
+          error?: string;
+        };
         throw new Error(data.error || '批量分组失败');
       }
       setSelectedUsers(new Set());
@@ -380,7 +386,9 @@ const UserConfig = ({ config, role, refreshConfig }: UserConfigProps) => {
         body: JSON.stringify({ action: 'removeUsers', users: Array.from(selectedUsers) }),
       });
       if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
+        const data = (await resp.json().catch(() => ({}))) as {
+          error?: string;
+        };
         throw new Error(data.error || '批量移出失败');
       }
       setSelectedUsers(new Set());
@@ -400,7 +408,9 @@ const UserConfig = ({ config, role, refreshConfig }: UserConfigProps) => {
         body: JSON.stringify({ ...body }),
       });
       if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
+        const data = (await resp.json().catch(() => ({}))) as {
+          error?: string;
+        };
         throw new Error(data.error || `操作失败: ${resp.status}`);
       }
       await refreshConfig();
@@ -662,7 +672,9 @@ const UserConfig = ({ config, role, refreshConfig }: UserConfigProps) => {
       });
 
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
+        const data = (await res.json().catch(() => ({}))) as {
+          error?: string;
+        };
         throw new Error(data.error || `操作失败: ${res.status}`);
       }
 
@@ -1121,7 +1133,9 @@ const VideoSourceConfig = ({
       });
 
       if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
+        const data = (await resp.json().catch(() => ({}))) as {
+          error?: string;
+        };
         throw new Error(data.error || `操作失败: ${resp.status}`);
       }
 
@@ -1628,7 +1642,9 @@ const CategoryConfig = ({
       });
 
       if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
+        const data = (await resp.json().catch(() => ({}))) as {
+          error?: string;
+        };
         throw new Error(data.error || `操作失败: ${resp.status}`);
       }
 
@@ -1955,7 +1971,9 @@ const ConfigFileComponent = ({ config, refreshConfig }: { config: AdminConfig | 
       });
 
       if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
+        const data = (await resp.json().catch(() => ({}))) as {
+          error?: string;
+        };
         throw new Error(data.error || `保存失败: ${resp.status}`);
       }
 
@@ -2052,7 +2070,9 @@ const SubscriptionConfig = ({ config, refreshConfig }: { config: AdminConfig | n
         }),
       });
       if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
+        const data = (await resp.json().catch(() => ({}))) as {
+          error?: string;
+        };
         throw new Error(data.error || '保存失败');
       }
       showSuccess('订阅配置已保存');
@@ -2077,7 +2097,9 @@ const SubscriptionConfig = ({ config, refreshConfig }: { config: AdminConfig | n
         }),
       });
       if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
+        const data = (await resp.json().catch(() => ({}))) as {
+          error?: string;
+        };
         throw new Error(data.error || '导入失败');
       }
       showSuccess('订阅数据导入成功');
@@ -2372,7 +2394,9 @@ const SiteConfigComponent = ({ config }: { config: AdminConfig | null }) => {
       });
 
       if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
+        const data = (await resp.json().catch(() => ({}))) as {
+          error?: string;
+        };
         throw new Error(data.error || `保存失败: ${resp.status}`);
       }
 

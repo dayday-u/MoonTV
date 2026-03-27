@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { downloadTsSegment, parseM3U8 } from '@/lib/m3u8-downloader';
 
-export const runtime = 'edge';
 
 /**
  * 解析M3U8文件接口
@@ -10,7 +9,9 @@ export const runtime = 'edge';
  */
 export async function POST(request: NextRequest) {
   try {
-    const { url } = await request.json();
+    const { url } = (await request.json()) as {
+      url?: string;
+    };
 
     if (!url) {
       return NextResponse.json({ error: '缺少 m3u8 URL' }, { status: 400 });

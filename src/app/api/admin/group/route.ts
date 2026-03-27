@@ -7,7 +7,6 @@ import { getConfig } from '@/lib/config';
 import { getStorage } from '@/lib/db';
 import { IStorage } from '@/lib/types';
 
-export const runtime = 'edge';
 
 type Action =
   | 'create'
@@ -145,5 +144,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: '分组管理操作失败', details: (error as Error).message }, { status: 500 });
   }
 }
-
 

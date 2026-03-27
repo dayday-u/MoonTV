@@ -1,6 +1,7 @@
 /* eslint-disable no-console, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 
 import { AdminConfig } from './admin.types';
+import { getCloudflareBinding } from './cloudflare';
 import { Favorite, IStorage, PlayRecord, SkipConfig } from './types';
 
 // 搜索历史最大条数
@@ -26,15 +27,14 @@ interface D1Result<T = any> {
 }
 
 // 获取 D1 数据库绑定
-function getD1Database(): D1Database {
-  // 在 Cloudflare Pages 环境中，D1 数据库通过环境变量绑定
-  if (typeof process !== 'undefined' && process.env) {
-    return (process.env as any).DB as D1Database;
+export function getD1Database(): D1Database {
+  const db = getCloudflareBinding<D1Database>('DB');
+  if (db) {
+    return db;
   }
 
-  // 在浏览器环境中，D1 不可用
   throw new Error(
-    'D1 database is only available in Cloudflare Pages environment'
+    'D1 database binding `DB` is missing. Add it to your Cloudflare Workers bindings before using NEXT_PUBLIC_STORAGE_TYPE=d1.'
   );
 }
 

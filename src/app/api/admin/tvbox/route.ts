@@ -6,7 +6,6 @@ import { getAuthInfoFromCookie } from '@/lib/auth';
 import { getConfig } from '@/lib/config';
 import { getStorage } from '@/lib/db';
 
-export const runtime = 'edge';
 
 export async function GET(request: NextRequest) {
   const storageType = process.env.NEXT_PUBLIC_STORAGE_TYPE || 'localstorage';
@@ -68,7 +67,10 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  const body = await request.json();
+  const body = (await request.json()) as {
+    enabled?: boolean;
+    password?: string;
+  };
   const { enabled, password, mode } = body as {
     enabled?: boolean;
     password?: string;
@@ -121,5 +123,3 @@ export async function POST(request: NextRequest) {
     })(),
   });
 }
-
-
